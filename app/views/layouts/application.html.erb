@@ -11,7 +11,11 @@
   </head>
 
   <body>
-    <%= Time.now.utc %>
-    <%= yield %>
+    <main class="container mt-3">
+      <div id="flash">
+        <%= render 'shared/flash' %>
+      </div>
+      <%= yield %>
+    </main>
   </body>
 </html>
