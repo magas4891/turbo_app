@@ -4,6 +4,10 @@ class QuestionsController < ApplicationController
   # GET /questions or /questions.json
   def index
     @questions = Question.all
+    # respond_to do |format|
+    #   format.turbo_stream { render turbo_stream: turbo_stream.update('new_question') }
+    #   format.html
+    # end
   end
 
   # GET /questions/1 or /questions/1.json
@@ -13,21 +17,26 @@ class QuestionsController < ApplicationController
   # GET /questions/new
   def new
     @question = Question.new
-    respond_to do |format|
-      format.turbo_stream do
-        render turbo_stream: [
-          turbo_stream.update('new_question', partial: 'form', locals: { question: @question })
-        ]
-      end
-    end
+    # respond_to do |format|
+    #   format.turbo_stream do
+    #     render turbo_stream: [
+    #       turbo_stream.update('new_question', partial: 'form', locals: { question: @question }),
+    #       turbo_stream.update('flash', html: '')
+    #     ]
+    #   end
+    # end
   end
 
   # GET /questions/1/edit
   def edit
     respond_to do |format|
       format.turbo_stream do
-        render turbo_stream: turbo_stream.update(@question, partial: 'form', locals: { question: @question })
+        render turbo_stream: [
+          turbo_stream.update('new_question', partial: 'form', locals: { question: @question }),
+          turbo_stream.update('flash', html: '')
+        ]
       end
+      format.html { render partial: 'form', locals: { question: @question } }
     end
   end
 
@@ -42,7 +51,7 @@ class QuestionsController < ApplicationController
           render turbo_stream: [
             turbo_stream.append('questions', partial: 'question', locals: { question: @question }),
             turbo_stream.update('flash', partial: 'shared/flash'),
-            turbo_stream.update('new_question', html: '')
+            turbo_stream.update('new_question', partial: 'new_question')
           ]
         end
         format.html { redirect_to question_url(@question), notice: "Question was successfully created." }
@@ -76,10 +85,10 @@ class QuestionsController < ApplicationController
 
     respond_to do |format|
       format.turbo_stream do
-        flash.now[:success] = "Question was successfully deleted."
+        flash.now[:notice] = "Question was successfully deleted."
         render turbo_stream: [
           turbo_stream.remove(@question),
-          turbo_stream.update('flash', partial: 'shared/flash'),
+          turbo_stream.update('flash', partial: 'shared/flash')
         ]
       end
       format.html { redirect_to questions_url, notice: "Question was successfully destroyed." }

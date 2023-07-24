@@ -4,8 +4,7 @@
     <%= render question %>
   <% end %>
 </div>
-<%= button_to "New question", new_question_path, method: :post %>
 
-<div>
-  <%= turbo_frame_tag 'new_question'%>
-</div>
+<%= turbo_frame_tag 'new_question' do %>
+  <%= render 'new_question' %>
+<% end %>

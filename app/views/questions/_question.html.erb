@@ -1,4 +1,4 @@
-<div id="<%= dom_id question %>">
+<%= turbo_frame_tag dom_id(question) do %>
   <p>
     <strong>Title:</strong>
     <%= question.title %>
@@ -7,6 +7,6 @@
     <strong>Body:</strong>
     <%= question.body %>
   </p>
-  <%= button_to "Edit this question", edit_question_path(question), method: :post %>
+  <%= link_to "Edit this question", edit_question_path(question) %>
   <%= button_to "Destroy this question", question, method: :delete %>
-</div>
+<% end %>
